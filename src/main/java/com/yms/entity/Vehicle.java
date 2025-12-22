@@ -10,6 +10,10 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @ManyToOne
+    @JoinColumn(name = "yard_slot_id")
+    private YardSlot yardSlot;
 
     @Column(nullable = false)
     private String vehicleNumber;
@@ -81,4 +85,13 @@ public class Vehicle {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    public YardSlot getYardSlot() {
+        return yardSlot;
+    }
+
+    public void setYardSlot(YardSlot yardSlot) {
+        this.yardSlot = yardSlot;
+    }
+
 }
