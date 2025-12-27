@@ -7,11 +7,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.yms.util.JwtUtil;
@@ -26,38 +26,44 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain chain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain
+    ) throws ServletException, IOException {
 
-        // ✅ Allow preflight requests
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
+        // 🔓 DO NOT FILTER AUTH ENDPOINTS
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/auth")) {
+            chain.doFilter(request, response);
             return;
         }
 
         String authHeader = request.getHeader("Authorization");
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")
+                && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             String token = authHeader.substring(7);
 
-            String username = jwtUtil.extractUsername(token);
-            String role = jwtUtil.extractRole(token); // MUST be ROLE_GATE
+            try {
+                String username = jwtUtil.extractUsername(token);
+                String role = jwtUtil.extractRole(token);
 
-            SimpleGrantedAuthority authority =
-                    new SimpleGrantedAuthority(role);
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                username,
+                                null,
+                                List.of(new SimpleGrantedAuthority(role))
+                        );
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            username,
-                            null,
-                            List.of(authority)
-                    );
+                SecurityContextHolder.getContext()
+                        .setAuthentication(authentication);
 
-            SecurityContextHolder.getContext()
-                    .setAuthentication(authentication);
+            } catch (Exception e) {
+                // ❗ INVALID TOKEN → CLEAR CONTEXT (IMPORTANT)
+                SecurityContextHolder.clearContext();
+            }
         }
 
         chain.doFilter(request, response);
