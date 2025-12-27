@@ -1,6 +1,7 @@
 package com.yms.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.yms.dto.VehicleRequest;
@@ -9,7 +10,6 @@ import com.yms.service.VehicleService;
 
 @RestController
 @RequestMapping("/api/gate")
-@CrossOrigin
 public class GateController {
 
     private final VehicleService vehicleService;
@@ -19,7 +19,9 @@ public class GateController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Vehicle> registerVehicle(@RequestBody VehicleRequest request) {
-        return ResponseEntity.ok(vehicleService.registerVehicle(request));
+    @PreAuthorize("hasRole('GATE')")
+    public ResponseEntity<String> registerVehicle(@RequestBody VehicleRequest request) {
+    	vehicleService.registerVehicle(request);
+        return ResponseEntity.ok("Vehicle registered successfully");
     }
 }

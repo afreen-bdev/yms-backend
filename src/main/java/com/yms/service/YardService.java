@@ -1,7 +1,7 @@
 package com.yms.service;
 
-import com.yms.entity.Vehicle;
-
 public interface YardService {
-    Vehicle allocateToYard(Long vehicleId);
+	 void allocateVehicle(Long vehicleId);
+	 void exitVehicle(Long vehicleId);
+
 }

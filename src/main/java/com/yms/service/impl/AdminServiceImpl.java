@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 
 import com.yms.entity.Vehicle;
+import com.yms.entity.VehicleStatus;
 import com.yms.repository.VehicleRepository;
 import com.yms.service.AdminService;
 
@@ -30,7 +31,7 @@ public class AdminServiceImpl implements AdminService {
     public List<Vehicle> getVehiclesByStatus(String status) {
         return vehicleRepository.findAll()
                 .stream()
-                .filter(v -> v.getStatus().equalsIgnoreCase(status))
+                .filter(v -> v.getStatus() == VehicleStatus.IN_YARD)
                 .toList();
     }
 

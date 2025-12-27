@@ -9,5 +9,4 @@ public class YmsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(YmsApplication.class, args);
 	}
-
 }

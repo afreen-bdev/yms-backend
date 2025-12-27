@@ -1,9 +1,12 @@
 package com.yms.dto;
 
+import com.yms.entity.Role;
+
 public class LoginRequest {
 
     private String username;
     private String password;
+    private Role role;
 
     public String getUsername() {
         return username;
@@ -20,4 +23,11 @@ public class LoginRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+	}
 }

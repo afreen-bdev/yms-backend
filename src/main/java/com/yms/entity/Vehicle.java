@@ -2,6 +2,8 @@ package com.yms.entity;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity
 @Table(name = "vehicles")
@@ -11,9 +13,13 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    
     @ManyToOne
     @JoinColumn(name = "yard_slot_id")
     private YardSlot yardSlot;
+    
+    @OneToOne(mappedBy = "vehicle", cascade = CascadeType.ALL)
+    private Receipt receipt;
 
     @Column(nullable = false)
     private String vehicleNumber;
@@ -29,10 +35,8 @@ public class Vehicle {
 
     private LocalDateTime exitTime;
 
-    @Column(nullable = false)
-    private String status; // REGISTERED, IN_YARD, EXITED
-
-    // --- getters & setters ---
+    @Enumerated(EnumType.STRING)
+    private VehicleStatus status;
 
     public Long getId() {
         return id;
@@ -78,11 +82,11 @@ public class Vehicle {
         this.exitTime = exitTime;
     }
 
-    public String getStatus() {
+    public VehicleStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(VehicleStatus status) {
         this.status = status;
     }
     
@@ -92,6 +96,14 @@ public class Vehicle {
 
     public void setYardSlot(YardSlot yardSlot) {
         this.yardSlot = yardSlot;
+    }
+    
+    public Receipt getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(Receipt receipt) {
+        this.receipt = receipt;
     }
 
 }
