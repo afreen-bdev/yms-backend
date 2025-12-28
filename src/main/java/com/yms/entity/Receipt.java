@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "receipt")
 public class Receipt {
 
 	@Id
@@ -37,7 +38,7 @@ public class Receipt {
     
     private String paymentStatus; // PAID / PENDING
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "receipt_id")
     private List<ReceiptItem> items;
 

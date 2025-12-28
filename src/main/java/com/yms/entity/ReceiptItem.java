@@ -3,6 +3,7 @@ package com.yms.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "receipt_item")
 public class ReceiptItem {
 
 	@Id

@@ -18,7 +18,7 @@ public class YardSlot {
     )
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String slotNumber;
 
     @Column(nullable = false)
