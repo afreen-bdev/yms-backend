@@ -30,10 +30,10 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
             		.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/gate/**").authenticated()
-                .requestMatchers("/api/yard/**").authenticated()
-                .requestMatchers("/api/admin/**").authenticated()
+            		.requestMatchers("/api/gate/**").hasAuthority("ROLE_GATE")
+            		.requestMatchers("/api/yard/**").hasAuthority("ROLE_YARD")
+            		.requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
