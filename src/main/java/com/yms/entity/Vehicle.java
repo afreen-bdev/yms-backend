@@ -9,8 +9,16 @@ import jakarta.persistence.Enumerated;
 @Table(name = "vehicles")
 public class Vehicle {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "seq_gen"
+    )
+    @SequenceGenerator(
+        name = "seq_gen",
+        sequenceName = "global_seq",
+        allocationSize = 1
+    )
     private Long id;
     
     

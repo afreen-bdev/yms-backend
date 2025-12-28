@@ -5,8 +5,16 @@ import jakarta.persistence.*;
 @Entity
 public class ReceiptItem {
 
-	    @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "seq_gen"
+    )
+    @SequenceGenerator(
+        name = "seq_gen",
+        sequenceName = "global_seq",
+        allocationSize = 1
+    )
 	    private Long id;
 
 	    private String description;
