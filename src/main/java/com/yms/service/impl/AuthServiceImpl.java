@@ -24,6 +24,8 @@ public class AuthServiceImpl implements AuthService {
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
+    
+    
 
     @Override
     public LoginResponse login(LoginRequest request) {
@@ -53,3 +55,4 @@ public class AuthServiceImpl implements AuthService {
         );
     }
 }
+
