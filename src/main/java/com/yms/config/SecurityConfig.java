@@ -47,7 +47,8 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
         	    "http://localhost:5173",
-        	    "https://yms-frontend.vercel.app"
+        	    "yms-frontend-aduy7g4gw-afreen-bdevs-projects.vercel.app"
+
         	));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
