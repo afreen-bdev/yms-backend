@@ -17,30 +17,31 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public AuthServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder,
-                           JwtUtil jwtUtil) {
+    public AuthServiceImpl(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtUtil jwtUtil) {
+
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
-    
-    
 
     @Override
     public LoginResponse login(LoginRequest request) {
 
-        User user = userRepository
-                .findByUsername(request.getUsername())
+        User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Invalid username"));
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword())) {
+
             throw new RuntimeException("Invalid password");
         }
 
-        // 🔐 ROLE VALIDATION (NEW)
-        if (request.getRole() == null || !user.getRole().equals(request.getRole())) {
-            throw new RuntimeException("Invalid role selected");
+        if (!user.getRole().name().equals(request.getRole())) {
+            throw new RuntimeException("Invalid role");
         }
 
         String token = jwtUtil.generateToken(
@@ -55,4 +56,3 @@ public class AuthServiceImpl implements AuthService {
         );
     }
 }
-

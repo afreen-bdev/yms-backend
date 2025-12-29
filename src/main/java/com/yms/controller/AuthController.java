@@ -1,6 +1,5 @@
 package com.yms.controller;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.yms.dto.LoginRequest;
@@ -19,8 +18,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        LoginResponse response = authService.login(request);
-        return ResponseEntity.ok(response);
+    public LoginResponse login(@RequestBody LoginRequest request) {
+        return authService.login(request);
     }
 }
