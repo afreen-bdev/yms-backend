@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.yms.dto.LoginRequest;
 import com.yms.dto.LoginResponse;
+import com.yms.entity.Role;
 import com.yms.entity.User;
 import com.yms.repository.UserRepository;
 import com.yms.service.AuthService;
@@ -17,11 +18,9 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public AuthServiceImpl(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            JwtUtil jwtUtil) {
-
+    public AuthServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder,
+                           JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
@@ -30,17 +29,17 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginResponse login(LoginRequest request) {
 
-        User user = userRepository.findByUsername(request.getUsername())
+        User user = userRepository
+                .findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Invalid username"));
 
-        if (!passwordEncoder.matches(
-                request.getPassword(),
-                user.getPassword())) {
-
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 
-        if (!user.getRole().name().equals(request.getRole())) {
+        Role requestedRole = request.getRole();
+
+        if (user.getRole() != requestedRole) {
             throw new RuntimeException("Invalid role");
         }
 
